@@ -1,0 +1,77 @@
+- name: Remote folder structure
+  hosts: all
+  remote_user: "{{ ansible_user }}"
+  become: true
+  tasks:
+    # Ensure the parent directory /home/ubuntu/cloud-1 exists
+    - name: Create parent directory on remote host
+      file:
+        path: /home/{{ ansible_user }}/cloud-1
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        recurse: yes
+
+    # Copy the Inception-42 directory if needed
+    - name: Copy inception to remote host
+      copy:
+        src: ../../inception
+        dest: /home/{{ ansible_user }}/cloud-1
+
+    # Ensure the 'data' directory exists
+    - name: Create data directory on remote host
+      file:
+        path: /home/{{ ansible_user }}/cloud-1/data
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+        recurse: yes
+
+    # Create WordPress data directory
+    - name: Create WordPress data directory
+      file:
+        path: /home/{{ ansible_user }}/data/wordpress
+        state: directory
+        mode: '0777'
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    # Create MariaDB data directory
+    - name: Create MariaDB data directory
+      file:
+        path: /home/{{ ansible_user }}/data/mariadb
+        state: directory
+        mode: '0777'
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    # Import Env file from AWS 
+    - name: Get secret from AWS Secrets Manager
+      set_fact:
+        env_file: "{{ lookup('amazon.aws.aws_secret', 'inception-env') }}"
+
+    # Export .env to path project
+    - name: Write .env file to project directory
+      copy:
+        content: "{{ env_file }}"
+        dest: /home/{{ ansible_user }}/cloud-1/.env
+        mode: '0600'
+    
+    # Export .env to subdir-project
+    - name: Write .env file to project sub-directory
+      copy:
+        content: "{{ env_file }}"
+        dest: /home/{{ ansible_user }}/cloud-1/inception/srcs/.env
+        mode: '0600'
+
+    - name: Add DOMAIN_NAME to .env
+      lineinfile:
+        path: /home/{{ ansible_user }}/cloud-1/.env
+        line: "DOMAIN_NAME={{ ansible_host }}"
+    
+    - name: Add DOMAIN_NAME to .env subdir
+      lineinfile:
+        path: /home/{{ ansible_user }}/cloud-1/inception/srcs/.env
+        line: "DOMAIN_NAME={{ ansible_host }}"
+ 

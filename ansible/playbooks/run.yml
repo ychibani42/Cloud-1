@@ -1,0 +1,9 @@
+- name: Run services in remote host
+  hosts: all
+  remote_user: "{{ ansible_user }}"
+  become: true
+  tasks:
+    - name: Run make all
+      ansible.builtin.command: 
+        cmd: make all
+        chdir: /home/{{ ansible_user }}/cloud-1/inception

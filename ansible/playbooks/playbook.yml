@@ -1,0 +1,11 @@
+- name: Setup Instance
+  import_playbook: ./setup.yml
+  tags: setup
+
+- name: Set up folder structure
+  import_playbook: ./folder_structure.yml
+  tags: folder_structure
+
+- name: Run services
+  import_playbook: ./run.yml
+  tags: run
