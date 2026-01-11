@@ -1,8 +1,3 @@
-Cloud-1 is a 42 project where you provision cloud infrastructure with Terraform, configure it with Ansible, and automate everything with scripts so the whole environment can be created and destroyed from your machine.
-The README below is adapted to your tree (Terraform + Ansible + scripts + keys) and references your architecture screenshot.
-
-***
-
 ## Cloud-1
 
 Cloud-1 is a 42 DevOps project focused on infrastructure-as-code and configuration management in a real cloud environment.  
@@ -56,7 +51,7 @@ Your current layout:
 
 The following diagram shows the Terraform-managed architecture for Cloud-1, as captured in the screenshot:
 
-[Screenshot from 2025-06-26 16-39-45.png]
+<img width="930" height="722" alt="image" src="https://github.com/user-attachments/assets/8ee8aec7-c4be-4d4b-bf59-48b0c052cc2e" />
 
 ***
 
@@ -151,4 +146,5 @@ Then show a minimal “quick start”:
 ./launcher.sh
 ./destroy.sh
 ```
+
 
